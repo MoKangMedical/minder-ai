@@ -1,0 +1,120 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "minder"
+version = "1.0.0"
+description = "Minder AI红娘 - 用AI让每个人找到对的人"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.11"
+authors = [
+    {name = "Minder Team", email = "team@minder.ai"},
+]
+keywords = ["ai", "matchmaking", "dating", "fastapi", "婚恋", "红娘"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Framework :: FastAPI",
+    "Topic :: Internet :: WWW/HTTP",
+]
+
+dependencies = [
+    "fastapi>=0.109.0",
+    "uvicorn[standard]>=0.27.0",
+    "sqlalchemy>=2.0.25",
+    "pydantic>=2.5.3",
+    "pydantic-settings>=2.1.0",
+    "python-jose[cryptography]>=3.3.0",
+    "passlib[bcrypt]>=1.7.4",
+    "python-multipart>=0.0.6",
+    "httpx>=0.26.0",
+    "redis>=5.0.1",
+    "aiofiles>=23.2.1",
+    "websockets>=12.0",
+    "gunicorn>=21.2.0",
+    "alembic>=1.13.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.4",
+    "pytest-asyncio>=0.23.3",
+    "pytest-cov>=4.1.0",
+    "pytest-xdist>=3.5.0",
+    "httpx>=0.26.0",
+    "ruff>=0.1.13",
+    "mypy>=1.8.0",
+    "black>=24.1.0",
+    "isort>=5.13.2",
+    "safety>=2.3.5",
+    "bandit>=1.7.7",
+    "pre-commit>=3.6.0",
+]
+
+ai = [
+    "torch>=2.1.2",
+    "transformers>=4.37.0",
+    "opencv-python>=4.9.0",
+    "librosa>=0.10.1",
+    "scikit-learn>=1.3.2",
+    "numpy>=1.26.3",
+    "pandas>=2.1.4",
+]
+
+postgres = [
+    "psycopg2-binary>=2.9.9",
+    "asyncpg>=0.29.0",
+]
+
+all = [
+    "minder[dev,ai,postgres]",
+]
+
+[project.urls]
+Homepage = "https://minder.ai"
+Documentation = "https://docs.minder.ai"
+Repository = "https://github.com/minder-ai/minder"
+Issues = "https://github.com/minder-ai/minder/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["minder*"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+select = ["E", "F", "W", "I", "N", "UP", "B", "A", "C4", "PT", "RUF"]
+ignore = ["E501"]
+
+[tool.ruff.isort]
+known-first-party = ["minder"]
+
+[tool.black]
+line-length = 120
+target-version = ["py312"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+asyncio_mode = "auto"
+addopts = "-v --tb=short --strict-markers"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "ai: marks tests requiring AI models",
+]
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+ignore_missing_imports = true
