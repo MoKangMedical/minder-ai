@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>联系我们 - Minder AI红娘</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0f1a;color:#e0e0e0;font-family:system-ui,sans-serif;line-height:1.8}
+a{color:#e94560;text-decoration:none}
+.container{max-width:800px;margin:0 auto;padding:0 24px}
+.back{display:inline-block;padding:20px 0;color:#8892b0}
+.back:hover{color:#e94560}
+.hero{text-align:center;padding:40px 0 60px}
+.hero h1{font-size:2.5rem;color:#fff;margin-bottom:8px}
+.hero h1 span{color:#e94560}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;padding-bottom:60px}
+.card{background:rgba(22,33,62,.65);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:28px}
+.card h2{color:#fff;font-size:1.2rem;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.06)}
+.card p{color:#b0b0b0;font-size:.95rem;margin-bottom:8px}
+.contact-item{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.contact-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.contact-text strong{color:#fff;display:block;font-size:.95rem}
+.contact-text span{color:#8892b0;font-size:.85rem}
+form label{display:block;color:#8892b0;font-size:.85rem;margin-bottom:4px;margin-top:12px}
+form input,form textarea{width:100%;padding:10px 12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#fff;font-size:.9rem;outline:none}
+form textarea{height:100px;resize:vertical}
+form button{margin-top:16px;padding:12px 28px;background:#e94560;color:#fff;border:none;border-radius:8px;font-size:1rem;font-weight:600;cursor:pointer;width:100%}
+form button:hover{background:#ff6b81}
+@media(max-width:768px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="container">
+<a href="index.html" class="back">&larr; 返回首页</a>
+<div class="hero">
+<h1>联系<span>我们</span></h1>
+<p>我们期待听到你的声音</p>
+</div>
+<div class="grid">
+<div class="card">
+<h2>联系方式</h2>
+<div class="contact-item">
+<div class="contact-icon" style="background:rgba(233,69,96,.15)">&#128231;</div>
+<div class="contact-text"><strong>邮箱</strong><span>contact@minder.ai</span></div>
+</div>
+<div class="contact-item">
+<div class="contact-icon" style="background:rgba(108,92,231,.15)">&#128172;</div>
+<div class="contact-text"><strong>微信公众号</strong><span>MinderAI红娘</span></div>
+</div>
+<div class="contact-item">
+<div class="contact-icon" style="background:rgba(0,184,148,.15)">&#127760;</div>
+<div class="contact-text"><strong>GitHub</strong><span>MoKangMedical/minder-ai</span></div>
+</div>
+<div class="contact-item">
+<div class="contact-icon" style="background:rgba(253,203,110,.15)">&#128205;</div>
+<div class="contact-text"><strong>地址</strong><span>中国 / 全球远程团队</span></div>
+</div>
+</div>
+<div class="card">
+<h2>发送消息</h2>
+<form onsubmit="alert('感谢您的留言，我们会尽快回复！');return false;">
+<label>姓名</label>
+<input type="text" placeholder="您的姓名" required>
+<label>邮箱</label>
+<input type="email" placeholder="您的邮箱" required>
+<label>消息内容</label>
+<textarea placeholder="请输入您的消息..." required></textarea>
+<button type="submit">发送消息</button>
+</form>
+</div>
+</div>
+</div>
+</body>
+</html>
