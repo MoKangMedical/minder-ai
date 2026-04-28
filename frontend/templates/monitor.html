@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minder - 系统监控</title>
+<style>
+body{background:#0a0f1a;color:#e0e0e0;font-family:system-ui,sans-serif;padding:24px}
+.container{max-width:1000px;margin:0 auto}
+h1{color:#fff;margin-bottom:24px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+.card{background:rgba(22,33,62,.65);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:20px}
+.card h3{color:#8892b0;font-size:.8rem;text-transform:uppercase;margin-bottom:8px}
+.card .val{font-size:2rem;font-weight:800;color:#fff}
+.card .sub{font-size:.8rem;color:#8892b0;margin-top:4px}
+.ok{color:#00b894} .warn{color:#fdcb6e} .err{color:#e94560}
+.table{width:100%;border-collapse:collapse;margin-top:16px}
+.table th,.table td{padding:10px;text-align:left;border-bottom:1px solid rgba(255,255,255,.04);font-size:.85rem}
+.table th{color:#8892b0}
+.status{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}
+.status.up{background:#00b894} .status.down{background:#e94560}
+.back{color:#8892b0;text-decoration:none;display:inline-block;margin-bottom:16px}
+.back:hover{color:#e94560}
+</style>
+</head>
+<body>
+<div class="container">
+<a href="/" class="back">&larr; 返回首页</a>
+<h1>系统监控</h1>
+<div class="grid">
+  <div class="card"><h3>服务状态</h3><div class="val ok">正常运行</div><div class="sub">Uptime: 99.97%</div></div>
+  <div class="card"><h3>API响应时间</h3><div class="val">23ms</div><div class="sub">P99: 45ms</div></div>
+  <div class="card"><h3>数据库连接</h3><div class="val ok">健康</div><div class="sub">Pool: 5/20 active</div></div>
+  <div class="card"><h3>今日请求</h3><div class="val">1.2M</div><div class="sub">+15.3% vs 昨日</div></div>
+  <div class="card"><h3>错误率</h3><div class="val ok">0.03%</div><div class="sub">目标: < 0.1%</div></div>
+  <div class="card"><h3>内存使用</h3><div class="val">342MB</div><div class="sub">/ 2GB limit</div></div>
+</div>
+<div class="card">
+  <h3 style="color:#8892b0;font-size:.8rem;text-transform:uppercase">API端点状态</h3>
+  <table class="table">
+    <tr><th>端点</th><th>状态</th><th>延迟</th><th>今日调用</th></tr>
+    <tr><td>/api/v1/auth/*</td><td><span class="status up"></span>正常</td><td>18ms</td><td>45,231</td></tr>
+    <tr><td>/api/v1/matching/*</td><td><span class="status up"></span>正常</td><td>32ms</td><td>128,847</td></tr>
+    <tr><td>/api/v1/messages/*</td><td><span class="status up"></span>正常</td><td>15ms</td><td>892,341</td></tr>
+    <tr><td>/api/v1/ai/*</td><td><span class="status up"></span>正常</td><td>156ms</td><td>23,847</td></tr>
+    <tr><td>/api/v1/health/*</td><td><span class="status up"></span>正常</td><td>45ms</td><td>8,234</td></tr>
+    <tr><td>/api/v1/payments/*</td><td><span class="status up"></span>正常</td><td>22ms</td><td>3,847</td></tr>
+  </table>
+</div>
+</div>
+</body>
+</html>
