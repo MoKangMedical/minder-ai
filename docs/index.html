@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minder AI红娘 - 用AI让每个人找到对的人</title>
+<meta name="description" content="Minder AI红娘，基于6维AI情感匹配算法，活体防诈验证，智能婚恋匹配平台。">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0f1a;--bg2:#16213e;--bg3:#1a1a2e;--accent:#e94560;--accent2:#ff6b81;--text:#e0e0e0;--text2:#8892b0;--glass:rgba(22,33,62,.65);--radius:12px;--shadow:0 8px 32px rgba(0,0,0,.3)}
+html{scroll-behavior:smooth;font-size:16px}
+body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.6;overflow-x:hidden}
+a{color:var(--accent);text-decoration:none;transition:color .2s}
+a:hover{color:var(--accent2)}
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border-radius:8px;font-size:1rem;font-weight:600;cursor:pointer;border:none;transition:all .3s}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent2);transform:translateY(-2px);box-shadow:0 4px 20px rgba(233,69,96,.4)}
+.btn-outline{background:transparent;color:var(--accent);border:2px solid var(--accent)}
+.btn-outline:hover{background:var(--accent);color:#fff}
+h1,h2,h3{color:#fff;font-weight:700}
+.section{padding:100px 0}
+.section-title{text-align:center;font-size:2.2rem;margin-bottom:12px}
+.section-sub{text-align:center;color:var(--text2);font-size:1.1rem;margin-bottom:60px;max-width:600px;margin-left:auto;margin-right:auto}
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+/* Fallback: make content visible after 1s if IntersectionObserver hasn't fired */
+@keyframes revealFallback{to{opacity:1;transform:translateY(0)}}
+.reveal:not(.visible){animation:revealFallback .6s ease 1s forwards}
+
+/* ===== NAV ===== */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 0;transition:background .3s,box-shadow .3s}
+nav.scrolled{background:rgba(10,15,26,.92);backdrop-filter:blur(12px);box-shadow:0 2px 20px rgba(0,0,0,.3)}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:1.5rem;font-weight:800;color:#fff;letter-spacing:-1px}
+.logo span{color:var(--accent)}
+.nav-links{display:flex;gap:32px;align-items:center}
+.nav-links a{color:var(--text2);font-size:.95rem;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:#fff}
+.nav-cta{padding:8px 20px;font-size:.9rem}
+.mobile-toggle{display:none;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer}
+
+/* ===== HERO ===== */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;padding-top:80px}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(233,69,96,.08) 0%,transparent 60%),radial-gradient(ellipse at 70% 50%,rgba(22,33,62,.5) 0%,transparent 60%)}
+.particles{position:absolute;inset:0;overflow:hidden}
+.particle{position:absolute;width:4px;height:4px;background:var(--accent);border-radius:50%;opacity:.3;animation:float linear infinite}
+@keyframes float{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:.4}90%{opacity:.4}100%{transform:translateY(-10vh) scale(1);opacity:0}}
+.hero-content{position:relative;z-index:2;max-width:800px}
+.hero h1{font-size:3.5rem;line-height:1.2;margin-bottom:20px;background:linear-gradient(135deg,#fff 0%,var(--accent2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:1.25rem;color:var(--text2);margin-bottom:36px;max-width:600px;margin-left:auto;margin-right:auto}
+.hero-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+
+/* ===== STATS ===== */
+.stats{background:var(--bg2);padding:40px 0}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center}
+.stat-num{font-size:2.2rem;font-weight:800;color:var(--accent)}
+.stat-label{color:var(--text2);font-size:.9rem;margin-top:4px}
+
+/* ===== FEATURES ===== */
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.feature-card{background:var(--glass);border:1px solid rgba(255,255,255,.06);border-radius:var(--radius);padding:36px 28px;transition:all .3s;position:relative;overflow:hidden}
+.feature-card:hover{transform:translateY(-6px);border-color:rgba(233,69,96,.3);box-shadow:0 12px 40px rgba(233,69,96,.1)}
+.feature-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));opacity:0;transition:opacity .3s}
+.feature-card:hover::before{opacity:1}
+.feature-icon{width:56px;height:56px;margin-bottom:20px}
+.feature-icon svg{width:100%;height:100%}
+.feature-card h3{font-size:1.2rem;margin-bottom:10px}
+.feature-card p{color:var(--text2);font-size:.95rem;line-height:1.7}
+
+/* ===== HOW IT WORKS ===== */
+.steps{display:flex;gap:0;justify-content:center;align-items:flex-start;flex-wrap:wrap}
+.step{text-align:center;flex:1;min-width:200px;max-width:260px;padding:20px;position:relative}
+.step-num{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:800;color:#fff;margin:0 auto 16px}
+.step h3{font-size:1.1rem;margin-bottom:8px}
+.step p{color:var(--text2);font-size:.9rem}
+.step-arrow{position:absolute;right:-20px;top:40px;color:var(--accent);font-size:1.5rem}
+
+/* ===== TECH ===== */
+.tech-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.radar{width:100%;max-width:400px;margin:0 auto}
+.radar svg{width:100%;height:auto}
+.tech-list{list-style:none}
+.tech-list li{padding:12px 0;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:12px}
+.tech-list .dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.tech-list .pct{font-weight:700;color:#fff;min-width:45px}
+
+/* ===== APP SHOWCASE ===== */
+.app-showcase{display:grid;grid-template-columns:280px 1fr;gap:60px;align-items:center}
+.phone-frame{width:280px;height:520px;background:#1a1a2e;border-radius:36px;border:3px solid rgba(255,255,255,.1);overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5),inset 0 0 0 2px rgba(255,255,255,.05);position:relative}
+.phone-frame::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:100px;height:24px;background:#1a1a2e;border-radius:0 0 16px 16px;z-index:2}
+.phone-screen{height:100%;background:linear-gradient(180deg,#16213e,#0a0f1a);padding:32px 16px 16px;display:flex;flex-direction:column}
+.app-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.app-logo-small{font-size:1.1rem;font-weight:800;color:#fff}
+.app-notif{font-size:1.1rem}
+.app-card{flex:1;background:rgba(255,255,255,.05);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.app-card-img{height:180px;background:linear-gradient(135deg,rgba(233,69,96,.3),rgba(108,92,231,.3))}
+.app-card-info{padding:12px}
+.app-card-name{font-size:1.1rem;font-weight:700;color:#fff}
+.app-card-age{font-weight:400;color:var(--text2)}
+.app-card-loc{color:var(--text2);font-size:.8rem;margin:4px 0 8px}
+.app-card-score{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.app-card-score span{font-size:.8rem;color:var(--accent);font-weight:600}
+.score-bar{flex:1;height:4px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden}
+.score-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px;transition:width 1s ease}
+.app-card-tags{display:flex;gap:6px;flex-wrap:wrap}
+.app-tag{padding:2px 8px;background:rgba(233,69,96,.15);color:var(--accent);border-radius:12px;font-size:.7rem}
+.app-actions{display:flex;justify-content:center;gap:20px;padding:16px 0}
+.app-btn-pass,.app-btn-star,.app-btn-like{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;cursor:pointer;transition:all .2s}
+.app-btn-pass{background:rgba(255,255,255,.05);color:var(--text2)}
+.app-btn-star{background:rgba(255,215,0,.15);color:#ffd700}
+.app-btn-like{background:rgba(233,69,96,.15);color:var(--accent)}
+.app-btn-like:hover{background:var(--accent);color:#fff;transform:scale(1.1)}
+.app-features-right{display:flex;flex-direction:column;gap:24px}
+.app-feature-item{display:flex;gap:16px;align-items:flex-start}
+.afi-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.app-feature-item h4{font-size:1rem;margin-bottom:4px;color:#fff}
+.app-feature-item p{color:var(--text2);font-size:.9rem;line-height:1.5}
+
+/* ===== TRUST BAR ===== */
+.trust-bar{padding:60px 0;background:var(--bg2);border-top:1px solid rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.04)}
+.trust-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.trust-item{display:flex;align-items:center;gap:12px}
+.trust-icon{width:40px;height:40px;flex-shrink:0}
+.trust-icon svg{width:100%;height:100%}
+.trust-text{font-size:.85rem;color:var(--text2)}
+.trust-text strong{color:#fff;font-size:.95rem}
+
+@media(max-width:900px){
+  .app-showcase{grid-template-columns:1fr;text-align:center}
+  .phone-frame{margin:0 auto}
+  .trust-grid{grid-template-columns:1fr 1fr}
+}
+
+/* ===== PRICING ===== */
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.price-card{background:var(--glass);border:1px solid rgba(255,255,255,.06);border-radius:var(--radius);padding:36px 28px;text-align:center;position:relative;transition:all .3s}
+.price-card.popular{border-color:var(--accent);transform:scale(1.05)}
+.price-card.popular::before{content:'最受欢迎';position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;padding:4px 16px;border-radius:20px;font-size:.8rem;font-weight:600}
+.price-card:hover{transform:translateY(-4px)}
+.price-card.popular:hover{transform:scale(1.05) translateY(-4px)}
+.price-name{font-size:1.3rem;font-weight:700;margin-bottom:8px}
+.price-amount{font-size:2.8rem;font-weight:800;color:var(--accent);margin-bottom:4px}
+.price-amount span{font-size:1rem;color:var(--text2);font-weight:400}
+.price-period{color:var(--text2);font-size:.9rem;margin-bottom:24px}
+.price-features{text-align:left;list-style:none;margin-bottom:28px}
+.price-features li{padding:8px 0;font-size:.95rem;color:var(--text2);display:flex;align-items:center;gap:8px}
+.price-features li::before{content:'';display:inline-block;width:18px;height:18px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23e94560'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z'/%3E%3C/svg%3E") center/contain no-repeat;flex-shrink:0}
+
+/* ===== TESTIMONIALS ===== */
+.test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.test-card{background:var(--glass);border:1px solid rgba(255,255,255,.06);border-radius:var(--radius);padding:28px}
+.test-stars{color:#fbbf24;margin-bottom:12px;font-size:1.1rem;letter-spacing:2px}
+.test-text{color:var(--text2);font-size:.95rem;line-height:1.7;margin-bottom:16px;font-style:italic}
+.test-author{display:flex;align-items:center;gap:12px}
+.test-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:1.1rem}
+.test-name{font-weight:600;font-size:.95rem}
+.test-meta{color:var(--text2);font-size:.8rem}
+
+/* ===== FAQ ===== */
+.faq-list{max-width:720px;margin:0 auto}
+.faq-item{border-bottom:1px solid rgba(255,255,255,.06)}
+.faq-q{padding:20px 0;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-weight:600;font-size:1.05rem;color:#fff;transition:color .2s}
+.faq-q:hover{color:var(--accent)}
+.faq-q::after{content:'+';font-size:1.3rem;color:var(--accent);transition:transform .3s}
+.faq-item.open .faq-q::after{transform:rotate(45deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease;padding:0 0 0 0;color:var(--text2);line-height:1.7}
+.faq-item.open .faq-a{max-height:200px;padding:0 0 20px 0}
+
+/* ===== CTA ===== */
+.cta-section{text-align:center;padding:100px 0;background:linear-gradient(180deg,transparent,rgba(233,69,96,.05),transparent)}
+.cta-section h2{font-size:2.5rem;margin-bottom:16px}
+.cta-section p{color:var(--text2);font-size:1.1rem;margin-bottom:32px}
+
+/* ===== FOOTER ===== */
+footer{background:var(--bg2);padding:60px 0 30px;border-top:1px solid rgba(255,255,255,.06)}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
+.footer-brand .logo{font-size:1.3rem;margin-bottom:12px}
+.footer-brand p{color:var(--text2);font-size:.9rem;line-height:1.7}
+.footer-col h4{color:#fff;font-size:1rem;margin-bottom:16px}
+.footer-col a{display:block;color:var(--text2);font-size:.9rem;padding:4px 0;transition:color .2s}
+.footer-col a:hover{color:var(--accent)}
+.footer-bottom{text-align:center;color:var(--text2);font-size:.85rem;padding-top:30px;border-top:1px solid rgba(255,255,255,.06)}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:900px){
+  .features-grid,.pricing-grid,.test-grid{grid-template-columns:1fr}
+  .tech-grid{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .hero h1{font-size:2.4rem}
+  .nav-links{display:none}
+  .mobile-toggle{display:block}
+  .nav-links.open{display:flex;flex-direction:column;position:absolute;top:60px;left:0;right:0;background:var(--bg);padding:20px;gap:16px}
+  .step-arrow{display:none}
+  .price-card.popular{transform:none}
+  .price-card.popular:hover{transform:translateY(-4px)}
+}
+@media(max-width:600px){
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .hero h1{font-size:2rem}
+  .section{padding:60px 0}
+  .footer-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav id="nav">
+<div class="nav-inner">
+  <div class="logo">Min<span>der</span></div>
+  <div class="nav-links" id="navLinks">
+    <a href="#features">核心功能</a>
+    <a href="#tech">技术优势</a>
+    <a href="/demo">AI体验</a>
+    <a href="#pricing">定价</a>
+    <a href="#faq">常见问题</a>
+    <a href="#download" class="btn btn-primary nav-cta">立即体验</a>
+  </div>
+  <button class="mobile-toggle" onclick="document.getElementById('navLinks').classList.toggle('open')">&#9776;</button>
+</div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="particles" id="particles"></div>
+  <div class="hero-content">
+    <h1>用AI让每个人<br>找到对的人</h1>
+    <p>基于语音情感分析、面部微表情、性格匹配、价值观评估、健康检测、生活方式六维AI算法，重新定义婚恋匹配的精准度。</p>
+    <div class="hero-btns">
+      <a href="#download" class="btn btn-primary">免费开始</a>
+      <a href="#tech" class="btn btn-outline">了解技术</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== STATS ===== -->
+<section class="stats">
+<div class="container">
+  <div class="stats-grid">
+    <div class="reveal"><div class="stat-num">68+</div><div class="stat-label">AI模型引擎</div></div>
+    <div class="reveal"><div class="stat-num">6维</div><div class="stat-label">智能匹配算法</div></div>
+    <div class="reveal"><div class="stat-num">1000万+</div><div class="stat-label">数据分析维度</div></div>
+    <div class="reveal"><div class="stat-num">99.7%</div><div class="stat-label">活体验证准确率</div></div>
+  </div>
+</div>
+</section>
+
+<!-- ===== FEATURES ===== -->
+<section class="section" id="features">
+<div class="container">
+  <h2 class="section-title reveal">六大核心功能</h2>
+  <p class="section-sub reveal">从匹配到约会，AI全程陪伴你的每一步</p>
+  <div class="features-grid">
+
+    <div class="feature-card reveal">
+      <div class="feature-icon"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="26" stroke="#e94560" stroke-width="2" fill="rgba(233,69,96,.1)"/><path d="M28 14c-7.18 0-13 5.82-13 13s5.82 13 13 13 13-5.82 13-13-5.82-13-13-13zm0 4a3 3 0 110 6 3 3 0 010-6zm0 18.5c-3.5 0-6.5-1.5-7-4.5h14c-.5 3-3.5 4.5-7 4.5z" fill="#e94560"/></svg></div>
+      <h3>AI情感匹配</h3>
+      <p>59维语音特征 + 6维面部微表情分析，通过深度学习模型计算两个人的情感兼容性，比传统问卷匹配精准3倍。</p>
+    </div>
+
+    <div class="feature-card reveal">
+      <div class="feature-icon"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="26" stroke="#e94560" stroke-width="2" fill="rgba(233,69,96,.1)"/><path d="M28 12L12 20v12c0 8.84 6.84 14.16 16 18 9.16-3.84 16-9.16 16-18V20L28 12zm-2 22l-6-6 2-2 4 4 10-10 2 2-12 12z" fill="#e94560"/></svg></div>
+      <h3>活体防诈验证</h3>
+      <p>活体检测 + ASR朗读验证，从源头杜绝照片造假、AI换脸、杀猪盘。每次视频通话自动触发安全检测。</p>
+    </div>
+
+    <div class="feature-card reveal">
+      <div class="feature-icon"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="26" stroke="#e94560" stroke-width="2" fill="rgba(233,69,96,.1)"/><path d="M28 14c-7.73 0-14 6.27-14 14s6.27 14 14 14 14-6.27 14-14-6.27-14-14-14zm-1 25.46V36h2v3.46A10.06 10.06 0 0118.54 31H22v-2h-3.46A10.06 10.06 0 0120 18.54V22h-2v-3.46A10.06 10.06 0 0116.46 27H13v2h3.46A10.06 10.06 0 0120 37.46V34h2v3.46z" fill="#e94560"/><path d="M28 20a8 8 0 100 16 8 8 0 000-16zm0 12a4 4 0 110-8 4 4 0 010 8z" fill="#e94560"/></svg></div>
+      <h3>健康评估</h3>
+      <p>遗传风险筛查、心理健康测评、生活方式评分。婚前健康AI评估报告，让你和对方都安心。</p>
+    </div>
+
+    <div class="feature-card reveal">
+      <div class="feature-icon"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="26" stroke="#e94560" stroke-width="2" fill="rgba(233,69,96,.1)"/><path d="M18 18h20v4H18zM18 26h14v4H18zM18 34h18v4H18z" fill="#e94560" rx="2"/><circle cx="38" cy="38" r="8" fill="#e94560"/><path d="M35 38h6M38 35v6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div>
+      <h3>数字红娘</h3>
+      <p>7x24小时在线的AI红娘顾问，基于数字人技术，提供约会建议、关系诊断、情感支持，比真人红娘更懂你。</p>
+    </div>
+
+    <div class="feature-card reveal">
+      <div class="feature-icon"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="26" stroke="#e94560" stroke-width="2" fill="rgba(233,69,96,.1)"/><path d="M28 12l4 8 8 1-6 5 2 8-8-4-8 4 2-8-6-5 8-1 4-8z" fill="#e94560"/></svg></div>
+      <h3>恋爱成长</h3>
+      <p>30天脱单训练营、恋爱技能徽章、约会焦虑冥想引导。从单身到恋爱，AI陪你一路成长。</p>
+    </div>
+
+    <div class="feature-card reveal">
+      <div class="feature-icon"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="26" stroke="#e94560" stroke-width="2" fill="rgba(233,69,96,.1)"/><circle cx="28" cy="28" r="12" stroke="#e94560" stroke-width="2" fill="none"/><path d="M16 28h24M28 16c-4 4-4 20 0 24M28 16c4 4 4 20 0 24" stroke="#e94560" stroke-width="2" fill="none"/></svg></div>
+      <h3>全球匹配</h3>
+      <p>支持8种语言，覆盖全球主要市场。跨国恋爱不再有语言障碍，AI自动适配文化差异。</p>
+    </div>
+
+  </div>
+</div>
+</section>
+
+<!-- ===== APP SHOWCASE ===== -->
+<section class="section" id="app">
+<div class="container">
+  <h2 class="section-title reveal">产品体验</h2>
+  <p class="section-sub reveal">滑动匹配，AI实时分析，让每一次相遇都有科学依据</p>
+  <div class="app-showcase reveal">
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <div class="app-header">
+          <div class="app-logo-small">Minder</div>
+          <div class="app-notif">&#128276;</div>
+        </div>
+        <div class="app-card">
+          <div class="app-card-img"></div>
+          <div class="app-card-info">
+            <div class="app-card-name">林小雅 <span class="app-card-age">25</span></div>
+            <div class="app-card-loc">&#128205; 杭州 / UI设计师</div>
+            <div class="app-card-score">
+              <div class="score-bar"><div class="score-fill" style="width:92%"></div></div>
+              <span>匹配度 92%</span>
+            </div>
+            <div class="app-card-tags">
+              <span class="app-tag">爱旅行</span>
+              <span class="app-tag">理性</span>
+              <span class="app-tag">猫奴</span>
+            </div>
+          </div>
+        </div>
+        <div class="app-actions">
+          <div class="app-btn-pass">&#10005;</div>
+          <div class="app-btn-star">&#9733;</div>
+          <div class="app-btn-like">&#10084;</div>
+        </div>
+      </div>
+    </div>
+    <div class="app-features-right">
+      <div class="app-feature-item reveal">
+        <div class="afi-icon" style="background:linear-gradient(135deg,#e94560,#ff6b81)">&#127919;</div>
+        <div><h4>智能推荐</h4><p>每天基于你的偏好和行为，AI推荐10位最匹配的候选人</p></div>
+      </div>
+      <div class="app-feature-item reveal">
+        <div class="afi-icon" style="background:linear-gradient(135deg,#6c5ce7,#a29bfe)">&#128274;</div>
+        <div><h4>隐私保护</h4><p>端到端加密聊天，阅后即焚，你的数据只属于你</p></div>
+      </div>
+      <div class="app-feature-item reveal">
+        <div class="afi-icon" style="background:linear-gradient(135deg,#00b894,#55efc4)">&#128172;</div>
+        <div><h4>AI破冰</h4><p>不知道说什么？AI根据双方资料生成个性化开场白</p></div>
+      </div>
+      <div class="app-feature-item reveal">
+        <div class="afi-icon" style="background:linear-gradient(135deg,#fdcb6e,#e17055)">&#127775;</div>
+        <div><h4>约会指导</h4><p>约会前提供穿搭建议、话题推荐、注意事项提醒</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ===== TRUST BADGES ===== -->
+<section class="trust-bar">
+<div class="container">
+  <div class="trust-grid">
+    <div class="trust-item reveal">
+      <div class="trust-icon"><svg viewBox="0 0 40 40" fill="none"><path d="M20 4L4 10v10c0 10 7 16 16 20 9-4 16-10 16-20V10L20 4z" fill="rgba(233,69,96,.15)" stroke="#e94560" stroke-width="2"/><path d="M14 20l4 4 8-8" stroke="#e94560" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+      <div class="trust-text"><strong>AES-256加密</strong><br>银行级数据安全</div>
+    </div>
+    <div class="trust-item reveal">
+      <div class="trust-icon"><svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="16" fill="rgba(233,69,96,.15)" stroke="#e94560" stroke-width="2"/><path d="M20 10v10l6 4" stroke="#e94560" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+      <div class="trust-text"><strong>7x24小时</strong><br>全天候AI守护</div>
+    </div>
+    <div class="trust-item reveal">
+      <div class="trust-icon"><svg viewBox="0 0 40 40" fill="none"><rect x="6" y="6" width="28" height="28" rx="6" fill="rgba(233,69,96,.15)" stroke="#e94560" stroke-width="2"/><path d="M14 20h12M20 14v12" stroke="#e94560" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+      <div class="trust-text"><strong>GDPR合规</strong><br>欧盟隐私标准</div>
+    </div>
+    <div class="trust-item reveal">
+      <div class="trust-icon"><svg viewBox="0 0 40 40" fill="none"><path d="M20 4a16 16 0 100 32 16 16 0 000-32z" fill="rgba(233,69,96,.15)" stroke="#e94560" stroke-width="2"/><path d="M13 20l3 3 11-11" stroke="#e94560" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+      <div class="trust-text"><strong>实名认证</strong><br>活体防诈验证</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ===== HOW IT WORKS ===== -->
+<section class="section" style="background:var(--bg2)" id="how">
+<div class="container">
+  <h2 class="section-title reveal">四步找到对的人</h2>
+  <p class="section-sub reveal">从注册到约会，AI帮你搞定一切</p>
+  <div class="steps">
+    <div class="step reveal">
+      <div class="step-num">1</div>
+      <h3>注册完善资料</h3>
+      <p>填写基本信息，上传照片，完成语音和面部AI分析</p>
+      <span class="step-arrow">&#8594;</span>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">2</div>
+      <h3>AI多维分析</h3>
+      <p>6维AI引擎同步工作，生成你的专属情感画像</p>
+      <span class="step-arrow">&#8594;</span>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">3</div>
+      <h3>智能匹配推荐</h3>
+      <p>每天推荐10位高兼容性候选人，附AI推荐理由</p>
+      <span class="step-arrow">&#8594;</span>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">4</div>
+      <h3>开始约会</h3>
+      <p>AI红娘提供约会建议、话题指导，全程陪伴</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ===== TECH ===== -->
+<section class="section" id="tech">
+<div class="container">
+  <h2 class="section-title reveal">六维匹配算法</h2>
+  <p class="section-sub reveal">不是随机推荐，是科学计算的结果</p>
+  <div class="tech-grid reveal">
+    <div class="radar">
+      <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#e94560;stop-opacity:.6"/>
+            <stop offset="100%" style="stop-color:#ff6b81;stop-opacity:.2"/>
+          </linearGradient>
+        </defs>
+        <!-- Grid -->
+        <g stroke="rgba(255,255,255,.08)" fill="none" stroke-width="1">
+          <polygon points="200,40 340,120 340,280 200,360 60,280 60,120"/>
+          <polygon points="200,80 310,140 310,260 200,320 90,260 90,140"/>
+          <polygon points="200,120 280,160 280,240 200,280 120,240 120,160"/>
+          <polygon points="200,160 250,180 250,220 200,240 150,220 150,180"/>
+        </g>
+        <!-- Axes -->
+        <g stroke="rgba(255,255,255,.12)" stroke-width="1">
+          <line x1="200" y1="40" x2="200" y2="200"/>
+          <line x1="340" y1="120" x2="200" y2="200"/>
+          <line x1="340" y1="280" x2="200" y2="200"/>
+          <line x1="200" y1="360" x2="200" y2="200"/>
+          <line x1="60" y1="280" x2="200" y2="200"/>
+          <line x1="60" y1="120" x2="200" y2="200"/>
+        </g>
+        <!-- Data polygon -->
+        <polygon points="200,64 318,132 322,268 200,336 82,262 88,144" fill="url(#rg)" stroke="#e94560" stroke-width="2" opacity=".8"/>
+        <!-- Data points -->
+        <circle cx="200" cy="64" r="5" fill="#e94560"/>
+        <circle cx="318" cy="132" r="5" fill="#e94560"/>
+        <circle cx="322" cy="268" r="5" fill="#e94560"/>
+        <circle cx="200" cy="336" r="5" fill="#e94560"/>
+        <circle cx="82" cy="262" r="5" fill="#e94560"/>
+        <circle cx="88" cy="144" r="5" fill="#e94560"/>
+        <!-- Labels -->
+        <text x="200" y="28" text-anchor="middle" fill="#e94560" font-size="13" font-weight="700">语音情感 20%</text>
+        <text x="355" y="118" text-anchor="start" fill="#e94560" font-size="13" font-weight="700">面部分析 15%</text>
+        <text x="355" y="290" text-anchor="start" fill="#e94560" font-size="13" font-weight="700">性格匹配 25%</text>
+        <text x="200" y="385" text-anchor="middle" fill="#e94560" font-size="13" font-weight="700">价值观 20%</text>
+        <text x="45" y="290" text-anchor="end" fill="#e94560" font-size="13" font-weight="700">健康评估 10%</text>
+        <text x="45" y="118" text-anchor="end" fill="#e94560" font-size="13" font-weight="700">生活方式 10%</text>
+      </svg>
+    </div>
+    <div>
+      <ul class="tech-list">
+        <li><span class="dot" style="background:#e94560"></span><span class="pct">20%</span>语音情感 — 59维特征向量，识别真实情绪和性格倾向</li>
+        <li><span class="dot" style="background:#ff6b81"></span><span class="pct">15%</span>面部分析 — 6维微表情，检测外貌偏好和情感反应</li>
+        <li><span class="dot" style="background:#c23616"></span><span class="pct">25%</span>性格匹配 — OCEAN模型，互补性格加权计算</li>
+        <li><span class="dot" style="background:#e17055"></span><span class="pct">20%</span>价值观 — 家庭观/事业观/消费观/世界观四维评估</li>
+        <li><span class="dot" style="background:#fab1a0"></span><span class="pct">10%</span>健康评估 — 遗传风险/心理/体能/生活方式综合</li>
+        <li><span class="dot" style="background:#ffcccc"></span><span class="pct">10%</span>生活方式 — 兴趣爱好/作息习惯/社交偏好匹配度</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ===== PRICING ===== -->
+<section class="section" style="background:var(--bg2)" id="pricing">
+<div class="container">
+  <h2 class="section-title reveal">选择适合你的方案</h2>
+  <p class="section-sub reveal">从免费开始，随时升级</p>
+  <div class="pricing-grid">
+
+    <div class="price-card reveal">
+      <div class="price-name">免费版</div>
+      <div class="price-amount">0<span>元</span></div>
+      <div class="price-period">永久免费</div>
+      <ul class="price-features">
+        <li>每日3位推荐</li>
+        <li>基础匹配算法</li>
+        <li>活体验证</li>
+        <li>每日3条消息</li>
+        <li>基础资料展示</li>
+      </ul>
+      <a href="#download" class="btn btn-outline" style="width:100%;justify-content:center">免费注册</a>
+    </div>
+
+    <div class="price-card popular reveal">
+      <div class="price-name">VIP会员</div>
+      <div class="price-amount">99<span>元/月</span></div>
+      <div class="price-period">按月订阅，随时取消</div>
+      <ul class="price-features">
+        <li>无限推荐</li>
+        <li>六维AI深度匹配</li>
+        <li>AI红娘对话咨询</li>
+        <li>无限消息</li>
+        <li>情感分析报告</li>
+        <li>约会建议</li>
+        <li>优先客服</li>
+      </ul>
+      <a href="#download" class="btn btn-primary" style="width:100%;justify-content:center">立即开通</a>
+    </div>
+
+    <div class="price-card reveal">
+      <div class="price-name">至尊会员</div>
+      <div class="price-amount">299<span>元/月</span></div>
+      <div class="price-period">按月订阅，随时取消</div>
+      <ul class="price-features">
+        <li>VIP全部功能</li>
+        <li>婚前健康评估报告</li>
+        <li>1对1真人红娘服务</li>
+        <li>深度匹配分析</li>
+        <li>恋爱成长课程</li>
+        <li>优先约会安排</li>
+        <li>VIP专属活动</li>
+      </ul>
+      <a href="#download" class="btn btn-outline" style="width:100%;justify-content:center">立即开通</a>
+    </div>
+
+  </div>
+</div>
+</section>
+
+<!-- ===== TESTIMONIALS ===== -->
+<section class="section" id="stories">
+<div class="container">
+  <h2 class="section-title reveal">他们的爱情故事</h2>
+  <p class="section-sub reveal">在Minder找到真爱的用户，分享他们的经历</p>
+  <div class="test-grid">
+
+    <div class="test-card reveal">
+      <div class="test-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <div class="test-text">"注册第三天就匹配到了我现在的女朋友。AI分析说我们性格互补，价值观一致，相处之后发现真的很准。已经交往8个月了。"</div>
+      <div class="test-author">
+        <div class="test-avatar">张</div>
+        <div>
+          <div class="test-name">张先生</div>
+          <div class="test-meta">北京 / 28岁 / 产品经理</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="test-card reveal">
+      <div class="test-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <div class="test-text">"最打动我的是活体验证功能，终于不用担心遇到照骗了。而且AI红娘给的约会建议真的很实用，第一次约会就很顺利。"</div>
+      <div class="test-author">
+        <div class="test-avatar">李</div>
+        <div>
+          <div class="test-name">李女士</div>
+          <div class="test-meta">上海 / 26岁 / 设计师</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="test-card reveal">
+      <div class="test-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <div class="test-text">"试过很多婚恋App，Minder的匹配精准度是最高的。健康评估功能也很贴心，让我们在交往前就了解彼此的健康状况。"</div>
+      <div class="test-author">
+        <div class="test-avatar">王</div>
+        <div>
+          <div class="test-name">王先生</div>
+          <div class="test-meta">深圳 / 31岁 / 软件工程师</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="section" style="background:var(--bg2)" id="faq">
+<div class="container">
+  <h2 class="section-title reveal">常见问题</h2>
+  <p class="section-sub reveal">关于Minder，你想知道的一切</p>
+  <div class="faq-list">
+
+    <div class="faq-item reveal">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Minder的匹配算法和传统婚恋平台有什么不同？</div>
+      <div class="faq-a">传统平台主要依赖用户填写的资料和简单条件筛选，匹配精度有限。Minder采用6维AI算法，通过语音情感分析、面部微表情、性格模型、价值观评估、健康检测、生活方式六个维度综合计算兼容性，匹配精度比传统方式高3倍以上。</div>
+    </div>
+
+    <div class="faq-item reveal">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">活体验证是如何防止诈骗的？</div>
+      <div class="faq-a">我们采用双重验证：1) 实时面部活体检测，要求用户完成随机动作（眨眼、转头），防止照片和视频造假；2) ASR朗读验证，要求用户朗读随机文字，确保是真人实时操作。通过这双重验证，可以有效杜绝99.7%的虚假账号。</div>
+    </div>
+
+    <div class="faq-item reveal">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">我的隐私数据安全吗？</div>
+      <div class="faq-a">绝对安全。我们采用AES-256端到端加密，所有聊天内容和照片只有你和匹配对象能看到。我们通过了GDPR和HIPAA合规认证，绝不会将你的数据出售给第三方。你随时可以删除自己的所有数据。</div>
+    </div>
+
+    <div class="faq-item reveal">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">AI红娘和真人红娘有什么区别？</div>
+      <div class="faq-a">AI红娘基于数字人技术，7x24小时在线，不受情绪和偏见影响，能基于大数据给出客观建议。它的知识库涵盖了数百万成功案例的模式。当然，至尊会员还可以享受1对1真人红娘服务，AI+真人双重保障效果最好。</div>
+    </div>
+
+    <div class="faq-item reveal">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">如何取消订阅？</div>
+      <div class="faq-a">非常简单。在设置页面点击"订阅管理"，选择"取消订阅"即可。取消后，当前付费周期结束前仍可使用所有功能，之后自动降级为免费版。不会收取任何额外费用。</div>
+    </div>
+
+  </div>
+</div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="cta-section" id="download">
+<div class="container reveal">
+  <h2>准备好找到对的人了吗？</h2>
+  <p>注册即享每日3位AI推荐，开始你的爱情之旅</p>
+  <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
+    <a href="/demo" class="btn btn-primary">免费体验</a>
+    <a href="/docs" class="btn btn-outline">查看API文档</a>
+  </div>
+</div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+<div class="container">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo">Min<span>der</span></div>
+      <p>用AI让每个人找到对的人。<br>基于68+个AI模型的智能婚恋匹配平台。</p>
+    </div>
+    <div class="footer-col">
+      <h4>产品</h4>
+      <a href="#features">核心功能</a>
+      <a href="#tech">技术优势</a>
+      <a href="#pricing">定价方案</a>
+      <a href="/docs">API文档</a>
+    </div>
+    <div class="footer-col">
+      <h4>支持</h4>
+      <a href="#faq">常见问题</a>
+      <a href="#">使用指南</a>
+<a href="/privacy">隐私政策</a>
+        <a href="/terms">服务条款</a>
+    </div>
+    <div class="footer-col">
+      <h4>联系我们</h4>
+      <a href="#">contact@minder.ai</a>
+      <a href="#">GitHub</a>
+      <a href="#">微信公众号</a>
+      <a href="#">微博</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    &copy; 2024-2026 Minder AI. MoKangMedical / OPC创业者联盟. All rights reserved.
+  </div>
+</div>
+</footer>
+
+<script>
+// ===== Particle animation =====
+(function(){
+  const c=document.getElementById('particles');
+  for(let i=0;i<30;i++){
+    const p=document.createElement('div');
+    p.className='particle';
+    p.style.left=Math.random()*100+'%';
+    p.style.animationDuration=(8+Math.random()*12)+'s';
+    p.style.animationDelay=Math.random()*10+'s';
+    p.style.width=p.style.height=(2+Math.random()*4)+'px';
+    c.appendChild(p);
+  }
+})();
+
+// ===== Nav scroll effect =====
+window.addEventListener('scroll',function(){
+  document.getElementById('nav').classList.toggle('scrolled',window.scrollY>50);
+});
+
+// ===== Scroll reveal =====
+const observer=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+},{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+// ===== Counter animation =====
+function animateCounters(){
+  document.querySelectorAll('.stat-num').forEach(el=>{
+    const text=el.textContent;
+    const match=text.match(/(\d+)/);
+    if(!match)return;
+    const target=parseInt(match[1]);
+    const suffix=text.replace(/\d+/,'');
+    let current=0;
+    const step=Math.ceil(target/40);
+    const timer=setInterval(()=>{
+      current+=step;
+      if(current>=target){current=target;clearInterval(timer);}
+      el.textContent=current+suffix;
+    },30);
+  });
+}
+const statsObserver=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      animateCounters();
+      statsObserver.unobserve(e.target);
+    }
+  });
+},{threshold:0.3});
+const statsSection=document.querySelector('.stats');
+if(statsSection)statsObserver.observe(statsSection);
+</script>
+</body>
+</html>
