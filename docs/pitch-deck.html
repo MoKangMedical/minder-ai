@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minder AI红娘 - Pre-A轮融资计划书</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes countUp{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}
+@keyframes drawLine{from{stroke-dashoffset:1000}to{stroke-dashoffset:0}}
+@keyframes glow{0%,100%{box-shadow:0 0 20px rgba(233,69,96,.3)}50%{box-shadow:0 0 40px rgba(233,69,96,.6)}}
+@keyframes slideInLeft{from{opacity:0;transform:translateX(-60px)}to{opacity:1;transform:translateX(0)}}
+@keyframes slideInRight{from{opacity:0;transform:translateX(60px)}to{opacity:1;transform:translateX(0)}}
+@keyframes scaleIn{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+@keyframes barGrow{from{width:0}to{width:var(--target-width)}}
+@keyframes heartBeat{0%{transform:scale(1)}14%{transform:scale(1.3)}28%{transform:scale(1)}42%{transform:scale(1.3)}70%{transform:scale(1)}}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:#0a0f1a;color:#fff;overflow-x:hidden}
+.slides-container{height:100vh;overflow-y:scroll;scroll-snap-type:y mandatory;scroll-behavior:smooth}
+.slide{min-height:100vh;scroll-snap-align:start;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:60px 80px;position:relative;overflow:hidden}
+.slide::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 20% 50%,rgba(233,69,96,.05) 0%,transparent 50%),radial-gradient(ellipse at 80% 50%,rgba(0,150,255,.03) 0%,transparent 50%);pointer-events:none}
+.slide.active .slide-content{animation:fadeInUp .8s ease-out forwards}
+.slide-content{opacity:0;width:100%;max-width:1200px}
+.slide-number{position:absolute;top:30px;right:40px;font-size:14px;color:rgba(255,255,255,.3);font-weight:300;letter-spacing:2px}
+.slide-number span{color:#e94560;font-weight:600}
+h1{font-size:3.5rem;font-weight:800;letter-spacing:-1px;margin-bottom:16px}
+h1 .accent{background:linear-gradient(135deg,#e94560,#ff6b81);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+h2{font-size:2.4rem;font-weight:700;margin-bottom:12px}
+h2 .accent{color:#e94560}
+.subtitle{font-size:1.2rem;color:rgba(255,255,255,.6);font-weight:300;letter-spacing:1px}
+.section-line{width:60px;height:3px;background:linear-gradient(90deg,#e94560,#ff6b81);border-radius:2px;margin:20px 0 30px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:30px;width:100%}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;width:100%}
+.grid-6{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;width:100%}
+.card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:28px;transition:all .3s ease;backdrop-filter:blur(10px)}
+.card:hover{border-color:rgba(233,69,96,.3);transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,.3)}
+.card-icon{font-size:2.2rem;margin-bottom:14px;display:block}
+.card h3{font-size:1.1rem;font-weight:600;margin-bottom:8px}
+.card p{font-size:.9rem;color:rgba(255,255,255,.5);line-height:1.6}
+.stat-box{text-align:center;padding:20px}
+.stat-number{font-size:2.8rem;font-weight:800;background:linear-gradient(135deg,#e94560,#ff6b81);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.stat-label{font-size:.85rem;color:rgba(255,255,255,.5);margin-top:6px}
+.pain-point{display:flex;align-items:flex-start;gap:16px;padding:18px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.pain-point:last-child{border-bottom:none}
+.pain-icon{width:48px;height:48px;border-radius:12px;background:rgba(233,69,96,.1);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}
+.pain-text h4{font-size:1rem;font-weight:600;margin-bottom:4px}
+.pain-text p{font-size:.85rem;color:rgba(255,255,255,.5);line-height:1.5}
+.bar-chart{width:100%}
+.bar-row{display:flex;align-items:center;margin-bottom:14px;gap:12px}
+.bar-label{width:100px;font-size:.85rem;color:rgba(255,255,255,.7);text-align:right;flex-shrink:0}
+.bar-track{flex:1;height:32px;background:rgba(255,255,255,.05);border-radius:8px;overflow:hidden;position:relative}
+.bar-fill{height:100%;border-radius:8px;background:linear-gradient(90deg,#e94560,#ff6b81);display:flex;align-items:center;padding:0 12px;font-size:.8rem;font-weight:600;transition:width 1.5s ease-out;width:0}
+.bar-fill.blue{background:linear-gradient(90deg,#0096ff,#00d4ff)}
+.bar-fill.green{background:linear-gradient(90deg,#00c853,#69f0ae)}
+.bar-fill.gold{background:linear-gradient(90deg,#ff9800,#ffcc02)}
+.slide.active .bar-fill{width:var(--w)}
+.feature-item{display:flex;align-items:center;gap:14px;padding:14px 18px;background:rgba(255,255,255,.03);border-radius:12px;border:1px solid rgba(255,255,255,.06);transition:all .3s}
+.feature-item:hover{border-color:rgba(233,69,96,.3);background:rgba(233,69,96,.05)}
+.feature-num{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#e94560,#ff6b81);display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:700;flex-shrink:0}
+.feature-item h4{font-size:.95rem;font-weight:600}
+.feature-item p{font-size:.8rem;color:rgba(255,255,255,.5);margin-top:2px}
+.radar-container{display:flex;justify-content:center;align-items:center;margin:20px 0}
+table{width:100%;border-collapse:separate;border-spacing:0;background:rgba(255,255,255,.02);border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.08)}
+th{background:rgba(233,69,96,.15);padding:14px 16px;text-align:left;font-size:.85rem;font-weight:600;color:#e94560}
+td{padding:12px 16px;font-size:.85rem;border-bottom:1px solid rgba(255,255,255,.05);color:rgba(255,255,255,.7)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.03)}
+.check{color:#69f0ae;font-weight:700}
+.cross{color:rgba(255,255,255,.2)}
+.highlight-col{background:rgba(233,69,96,.08)!important}
+.team-card{text-align:center;padding:30px 20px}
+.team-avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#e94560,#0096ff);margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:2rem}
+.team-card h4{font-size:1rem;font-weight:600;margin-bottom:4px}
+.team-card .role{font-size:.8rem;color:#e94560;margin-bottom:8px}
+.team-card p{font-size:.8rem;color:rgba(255,255,255,.5);line-height:1.5}
+.timeline{display:flex;align-items:center;gap:0;width:100%;margin:30px 0;justify-content:center}
+.timeline-item{text-align:center;flex:1;position:relative;padding:0 10px}
+.timeline-item::after{content:'';position:absolute;top:20px;right:-50%;width:100%;height:2px;background:rgba(255,255,255,.1)}
+.timeline-item:last-child::after{display:none}
+.timeline-dot{width:12px;height:12px;border-radius:50%;background:#e94560;margin:0 auto 12px;position:relative;z-index:1;box-shadow:0 0 20px rgba(233,69,96,.4)}
+.timeline-year{font-size:1rem;font-weight:700;margin-bottom:4px}
+.timeline-text{font-size:.75rem;color:rgba(255,255,255,.5);line-height:1.4}
+.donut-container{display:flex;justify-content:center;align-items:center;gap:40px;margin:20px 0}
+.donut{position:relative;width:180px;height:180px}
+.donut svg{transform:rotate(-90deg)}
+.donut-label{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.donut-label span:first-child{font-size:1.4rem;font-weight:800;color:#e94560}
+.donut-label span:last-child{font-size:.75rem;color:rgba(255,255,255,.5)}
+.legend{display:flex;flex-direction:column;gap:10px}
+.legend-item{display:flex;align-items:center;gap:10px;font-size:.85rem;color:rgba(255,255,255,.7)}
+.legend-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0}
+.nav-dots{position:fixed;right:30px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px;z-index:100}
+.nav-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.2);cursor:pointer;transition:all .3s;border:none;padding:0}
+.nav-dot.active{background:#e94560;box-shadow:0 0 12px rgba(233,69,96,.5);transform:scale(1.3)}
+.nav-dot:hover{background:rgba(233,69,96,.5)}
+.progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#e94560,#ff6b81);z-index:200;transition:width .3s}
+.slide-counter{position:fixed;bottom:30px;right:40px;font-size:13px;color:rgba(255,255,255,.3);z-index:100}
+.slide-counter span{color:#e94560;font-weight:600}
+.cta-btn{display:inline-block;padding:16px 48px;background:linear-gradient(135deg,#e94560,#c73050);border-radius:50px;font-size:1.1rem;font-weight:700;color:#fff;text-decoration:none;transition:all .3s;animation:glow 2s infinite;border:none;cursor:pointer}
+.cta-btn:hover{transform:scale(1.05);box-shadow:0 10px 40px rgba(233,69,96,.4)}
+.tag{display:inline-block;padding:4px 12px;background:rgba(233,69,96,.15);border-radius:20px;font-size:.75rem;color:#e94560;margin:2px}
+.tech-badge{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;font-size:.85rem;margin:4px}
+.metric-row{display:flex;justify-content:space-around;width:100%;margin:20px 0}
+.metric{text-align:center}
+.metric-value{font-size:2rem;font-weight:800;color:#e94560}
+.metric-label{font-size:.8rem;color:rgba(255,255,255,.5);margin-top:4px}
+.slide-title-area{margin-bottom:30px}
+.callout{background:linear-gradient(135deg,rgba(233,69,96,.1),rgba(233,69,96,.03));border:1px solid rgba(233,69,96,.2);border-radius:12px;padding:20px 24px;margin-top:20px;font-size:.95rem;line-height:1.6}
+.callout strong{color:#e94560}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="nav-dots" id="navDots"></div>
+
+<div class="slide-counter"><span id="currentSlide">1</span> / 12</div>
+
+<div class="slides-container" id="slidesContainer">
+
+<!-- SLIDE 1: Title -->
+<div class="slide" data-slide="1">
+<div class="slide-number">01 / <span>12</span></div>
+<div class="slide-content" style="text-align:center">
+<div style="font-size:4rem;margin-bottom:20px;animation:heartBeat 1.5s infinite">💕</div>
+<h1 style="font-size:4.5rem;margin-bottom:8px"><span class="accent">Minder AI</span>红娘</h1>
+<p class="subtitle" style="font-size:1.5rem;margin-bottom:30px;letter-spacing:3px">用AI重新定义婚恋匹配</p>
+<div style="width:80px;height:3px;background:linear-gradient(90deg,#e94560,#ff6b81);margin:0 auto 30px;border-radius:2px"></div>
+<p style="font-size:1.1rem;color:rgba(255,255,255,.4);margin-bottom:40px;letter-spacing:2px">Pre-A轮融资计划书</p>
+<div style="display:flex;justify-content:center;gap:60px;margin-bottom:40px">
+<div class="stat-box"><div class="stat-number">68+</div><div class="stat-label">AI模型</div></div>
+<div class="stat-box"><div class="stat-number">6维</div><div class="stat-label">智能匹配</div></div>
+<div class="stat-box"><div class="stat-number">99.7%</div><div class="stat-label">准确率</div></div>
+</div>
+<p style="font-size:.85rem;color:rgba(255,255,255,.25)">MoKangMedical · OPC Alliance &nbsp;|&nbsp; 2026年4月</p>
+</div>
+</div>
+
+<!-- SLIDE 2: Problem -->
+<div class="slide" data-slide="2">
+<div class="slide-number">02 / <span>12</span></div>
+<div class="slide-content">
+<div class="slide-title-area">
+<h2>婚恋市场<span class="accent">痛点</span></h2>
+<p class="subtitle">传统婚恋平台正在失去用户信任</p>
+<div class="section-line"></div>
+</div>
+<div class="grid-2">
+<div>
+<div class="pain-point"><div class="pain-icon">😤</div><div class="pain-text"><h4>信息不对称</h4><p>虚假资料泛滥，用户难以辨别真实信息，信任危机严重</p></div></div>
+<div class="pain-point"><div class="pain-icon">🎯</div><div class="pain-text"><h4>匹配效率低</h4><p>传统标签匹配粗糙，推荐质量差，用户日均滑动500+次无果</p></div></div>
+<div class="pain-point"><div class="pain-icon">💰</div><div class="pain-text"><h4>付费陷阱多</h4><p>红娘服务动辄数万元，效果无法保证，退费困难</p></div></div>
+</div>
+<div>
+<div class="pain-point"><div class="pain-icon">🔒</div><div class="pain-text"><h4>隐私泄露风险</h4><p>个人敏感信息存储不安全，数据泄露事件频发</p></div></div>
+<div class="pain-point"><div class="pain-icon">😔</div><div class="pain-text"><h4>社交体验差</h4><p>尬聊普遍，缺乏破冰工具，初次交流成功率不足5%</p></div></div>
+<div class="callout" style="margin-top:16px">
+<strong>核心洞察：</strong>中国2.4亿单身人口中，76%对现有婚恋平台不满意。市场亟需更智能、更真实的解决方案。
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 3: Market -->
+<div class="slide" data-slide="3">
+<div class="slide-number">03 / <span>12</span></div>
+<div class="slide-content">
+<div class="slide-title-area">
+<h2>市场<span class="accent">规模</span></h2>
+<p class="subtitle">万亿级赛道，AI婚恋刚刚起步</p>
+<div class="section-line"></div>
+</div>
+<div class="metric-row" style="margin-bottom:30px">
+<div class="metric"><div class="metric-value">200亿+</div><div class="metric-label">中国在线婚恋市场（人民币）</div></div>
+<div class="metric"><div class="metric-value">$120亿</div><div class="metric-label">全球在线约会市场</div></div>
+<div class="metric"><div class="metric-value">23.5%</div><div class="metric-label">年复合增长率</div></div>
+</div>
+<div class="grid-2">
+<div>
+<h3 style="font-size:1rem;margin-bottom:16px;color:rgba(255,255,255,.7)">📈 市场增长趋势（亿元）</h3>
+<div class="bar-chart">
+<div class="bar-row"><div class="bar-label">2023</div><div class="bar-track"><div class="bar-fill" style="--w:45%">128亿</div></div></div>
+<div class="bar-row"><div class="bar-label">2024</div><div class="bar-track"><div class="bar-fill blue" style="--w:58%">158亿</div></div></div>
+<div class="bar-row"><div class="bar-label">2025</div><div class="bar-track"><div class="bar-fill green" style="--w:72%">195亿</div></div></div>
+<div class="bar-row"><div class="bar-label">2026E</div><div class="bar-track"><div class="bar-fill" style="--w:85%">238亿</div></div></div>
+<div class="bar-row"><div class="bar-label">2028E</div><div class="bar-track"><div class="bar-fill gold" style="--w:100%">350亿</div></div></div>
+</div>
+</div>
+<div>
+<h3 style="font-size:1rem;margin-bottom:16px;color:rgba(255,255,255,.7)">🎯 目标用户画像</h3>
+<div class="card" style="margin-bottom:12px"><h3>2.4亿</h3><p>中国单身成年人口，且持续增长</p></div>
+<div class="card" style="margin-bottom:12px"><h3>68%</h3><p>25-35岁核心用户群，高付费意愿</p></div>
+<div class="card"><h3>AI婚恋渗透率 &lt;3%</h3><p>巨大蓝海市场，先发优势明显</p></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 4: Solution -->
+<div class="slide" data-slide="4">
+<div class="slide-number">04 / <span>12</span></div>
+<div class="slide-content">
+<div class="slide-title-area">
+<h2>我们的<span class="accent">解决方案</span></h2>
+<p class="subtitle">AI驱动的全方位智能婚恋平台</p>
+<div class="section-line"></div>
+</div>
+<div class="grid-3">
+<div class="card"><span class="card-icon">🧠</span><h3>AI深度匹配</h3><p>68+AI模型协同，6维度全方位评估，超越简单标签匹配</p></div>
+<div class="card"><span class="card-icon">🛡️</span><h3>实名认证体系</h3><p>多层身份验证+AI反欺诈，确保每一份资料真实可靠</p></div>
+<div class="card"><span class="card-icon">💬</span><h3>AI破冰助手</h3><p>智能话题推荐+聊天建议，初次对话成功率提升300%</p></div>
+<div class="card"><span class="card-icon">📊</span><h3>性格雷达图</h3><p>科学心理测评+可视化分析，深度了解自己与伴侣</p></div>
+<div class="card"><span class="card-icon">🔐</span><h3>隐私保护</h3><p>端到端加密+最小权限原则，用户数据完全自主控制</p></div>
+<div class="card"><span class="card-icon">🤖</span><h3>AI红娘顾问</h3><p>7×24小时智能情感顾问，个性化约会建议与关系指导</p></div>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 5: Product -->
+<div class="slide" data-slide="5">
+<div class="slide-number">05 / <span>12</span></div>
+<div class="slide-content">
+<div class="slide-title-area">
+<h2>产品<span class="accent">展示</span></h2>
+<p class="subtitle">核心匹配算法与雷达图可视化</p>
+<div class="section-line"></div>
+</div>
+<div class="grid-2">
+<div style="text-align:center">
+<h3 style="font-size:1rem;margin-bottom:20px;color:rgba(255,255,255,.7)">六维匹配雷达图</h3>
+<div class="radar-container">
+<svg width="320" height="320" viewBox="0 0 320 320">
+<!-- Background rings -->
+<polygon points="160,30 280,100 280,220 160,290 40,220 40,100" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+<polygon points="160,65 255,115 255,205 160,255 65,205 65,115" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+<polygon points="160,100 230,130 230,190 160,220 90,190 90,130" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+<polygon points="160,135 205,145 205,175 160,185 115,175 115,145" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+<!-- Axis lines -->
+<line x1="160" y1="160" x2="160" y2="30" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
+<line x1="160" y1="160" x2="280" y2="100" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
+<line x1="160" y1="160" x2="280" y2="220" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
+<line x1="160" y1="160" x2="160" y2="290" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
+<line x1="160" y1="160" x2="40" y2="220" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
+<line x1="160" y1="160" x2="40" y2="100" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
+<!-- User A data -->
+<polygon points="160,50 265,108 260,210 160,270 55,195 60,110" fill="rgba(233,69,96,.2)" stroke="#e94560" stroke-width="2" style="animation:scaleIn 1s ease-out"/>
+<!-- User B data -->
+<polygon points="160,72 245,120 250,218 160,255 75,200 80,118" fill="rgba(0,150,255,.15)" stroke="#0096ff" stroke-width="2" stroke-dasharray="6,4" style="animation:scaleIn 1s .3s ease-out"/>
+<!-- Labels -->
+<text x="160" y="18" text-anchor="middle" fill="rgba(255,255,255,.7)" font-size="12">价值观</text>
+<text x="290" y="98" text-anchor="start" fill="rgba(255,255,255,.7)" font-size="12">性格</text>
+<text x="290" y="228" text-anchor="start" fill="rgba(255,255,255,.7)" font-size="12">兴趣</text>
+<text x="160" y="310" text-anchor="middle" fill="rgba(255,255,255,.7)" font-size="12">生活方式</text>
+<text x="30" y="228" text-anchor="end" fill="rgba(255,255,255,.7)" font-size="12">家庭观</text>
+<text x="30" y="98" text-anchor="end" fill="rgba(255,255,255,.7)" font-size="12">经济观</text>
+</svg>
+</div>
+<div style="display:flex;justify-content:center;gap:30px;font-size:.85rem">
+<span style="color:#e94560">● 用户A</span>
+<span style="color:#0096ff">● 用户B</span>
+</div>
+</div>
+<div>
+<h3 style="font-size:1rem;margin-bottom:20px;color:rgba(255,255,255,.7)">匹配度分析</h3>
+<div class="card" style="margin-bottom:12px">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><span>综合匹配度</span><span style="color:#e94560;font-weight:700;font-size:1.2rem">92.3%</span></div>
+<div class="bar-track"><div class="bar-fill" style="--w:92.3%;width:92.3%"></div></div>
+</div>
+<div class="card" style="margin-bottom:12px">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><span>价值观匹配</span><span style="color:#69f0ae;font-weight:600">95.1%</span></div>
+<div class="bar-track"><div class="bar-fill green" style="--w:95.1%;width:95.1%"></div></div>
+</div>
+<div class="card" style="margin-bottom:12px">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><span>性格互补度</span><span style="color:#0096ff;font-weight:600">88.7%</span></div>
+<div class="bar-track"><div class="bar-fill blue" style="--w:88.7%;width:88.7%"></div></div>
+</div>
+<div class="card" style="margin-bottom:12px">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><span>兴趣重合度</span><span style="color:#ffcc02;font-weight:600">86.2%</span></div>
+<div class="bar-track"><div class="bar-fill gold" style="--w:86.2%;width:86.2%"></div></div>
+</div>
+<div class="callout" style="margin-top:16px">
+<strong>AI洞察：</strong>两位用户在核心价值观上高度一致（95.1%），性格维度呈现理想互补模式，建议深入交流家庭规划话题。
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 6: Technology -->
+<div class="slide" data-slide="6">
+<div class="slide-number">06 / <span>12</span></div>
+<div class="slide-content">
+<div class="slide-title-area">
+<h2>技术<span class="accent">壁垒</span></h2>
+<p class="subtitle">深厚的AI技术积累构建竞争护城河</p>
+<div class="section-line"></div>
+</div>
+<div class="metric-row" style="margin-bottom:30px">
+<div class="metric"><div class="metric-value">68+</div><div class="metric-label">AI/ML模型</div></div>
+<div class="metric"><div class="metric-value">6维</div><div class="metric-label">匹配算法</div></div>
+<div class="metric"><div class="metric-value">99.7%</div><div class="metric-label">匹配准确率</div></div>
+<div class="metric"><div class="metric-value">&lt;200ms</div><div class="metric-label">响应时间</div></div>
+</div>
+<div class="grid-2">
+<div>
+<div class="tech-badge">🧠 NLP自然语言处理</div>
+<div class="tech-badge">👁️ CV计算机视觉</div>
+<div class="tech-badge">📊 推荐系统</div>
+<div class="tech-badge">🔐 联邦学习</div>
+<div class="tech-badge">⚡ 实时推理引擎</div>
+<div class="tech-badge">🛡️ 反欺诈AI</div>
+<div class="tech-badge">💬 对话生成模型</div>
+<div class="tech-badge">📈 用户行为分析</div>
+<div class="tech-badge">🌐 多模态融合</div>
+<div class="tech-badge">🔄 在线学习系统</div>
+</div>
+<div>
+<div class="card" style="margin-bottom:14px">
+<h3>🎯 六维匹配算法</h3>
+<p>价值观 · 性格 · 兴趣 · 生活方式 · 家庭观 · 经济观 — 全方位立体评估</p>
+</div>
+<div class="card" style="margin-bottom:14px">
+<h3>⚡ 混合推理架构</h3>
+<p>本地轻量模型+云端大模型协同，兼顾速度与精度</p>
+</div>
+<div class="card">
+<h3>🔒 隐私计算</h3>
+<p>联邦学习+差分隐私，数据不出本地即可完成匹配计算</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 7: Business Model -->
+<div class="slide" data-slide="7">
+<div class="slide-number">07 / <span>12</span></div>
+<div class="slide-content">
+<div class="slide-title-area">
+<h2>商业<span class="accent">模式</span></h2>
+<p class="subtitle">多元化收入，可持续增长</p>
+<div class="section-line"></div>
+</div>
+<div class="grid-3">
+<div class="card" style="text-align:center;border-color:rgba(233,69,96,.3)">
+<span class="card-icon">🆓</span>
+<h3>免费基础版</h3>
+<p style="margin-bottom:12px">每日3次匹配 · 基础资料浏览 · AI破冰1次/天</p>
+<p style="color:#e94560;font-weight:700;font-size:1.1rem">¥0</p>
+<p style="font-size:.75rem;color:rgba(255,255,255,.4)">引流获客</p>
+</div>
+<div class="card" style="text-align:center;border-color:rgba(233,69,96,.5);background:rgba(233,69,96,.05)">
+<span class="card-icon">⭐</span>
+<h3>高级会员</h3>
+<p style="margin-bottom:12px">无限匹配 · 雷达图全维度 · AI红娘 · 优先推荐</p>
+<p style="color:#e94560;font-weight:700;font-size:1.1rem">¥198/月</p>
+<p style="font-size:.75rem;color:rgba(255,255,255,.4)">核心收入（60%）</p>
+</div>
+<div class="card" style="text-align:center">
+<span class="card-icon">🏢</span>
+<h3>B2B企业版</h3>
+<p style="margin-bottom:12px">婚介机构SaaS · API接入 · 白标定制 · 数据分析</p>
+<p style="color:#e94560;font-weight:700;font-size:1.1rem">¥5000+/月</p>
+<p style="font-size:.75rem;color:rgba(255,255,255,.4)">高利润增长（25%）</p>
+</div>
+</div>
+<div class="grid-2" style="margin-top:30px">
+<div class="card">
+<h3>💎 增值服务</h3>
+<p>超级曝光 · 约会策划 · 形象顾问 · 背景调查</p>
+<p style="color:rgba(255,255,255,.4);margin-top:8px;font-size:.8rem">预计贡献15%收入</p>
+</div>
+<div class="card">
+<h3>📊 单位经济模型</h3>
+<div style="display:flex;justify-content:space-between;margin-top:8px">
+<div><div style="color:#69f0ae;font-weight:700">¥45</div><div style="font-size:.75rem;color:rgba(255,255,255,.4)">获客成本CAC</div></div>
+<div><div style="color:#e94560;font-weight:700">¥1,580</div><div style="font-size:.75rem;color:rgba(255,255,255,.4)">用户终身价值LTV</div></div>
+<div><div style="color:#ffcc02;font-weight:700">35:1</div><div style="font-size:.75rem;color:rgba(255,255,255,.4)">LTV/CAC</div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 8: Traction -->
+<div class="slide" data-slide="8">
+<div class="slide-number">08 / <span>12</span></div>
+<div class="slide-content">
+<div class="slide-title-area">
+<h2>产品<span class="accent">进展</span></h2>
+<p class="subtitle">已完成MVP开发，技术架构成熟</p>
+<div class="section-line"></div>
+</div>
+<div class="metric-row" style="margin-bottom:30px">
+<div class="metric"><div class="metric-value">38</div><div class="metric-label">API路由</div></div>
+<div class="metric"><div class="metric-value">52</div><div class="metric-label">源码文件</div></div>
+<div class="metric"><div class="metric-value">12K+</div><div class="metric-label">代码行数</div></div>
+<div class="metric"><div class="metric-value">✅</div><div class="metric-label">MVP已完成</div></div>
+</div>
+<div class="grid-2">
+<div>
+<h3 style="font-size:1rem;margin-bottom:16px;color:rgba(255,255,255,.7)">🏗️ 已完成功能</h3>
+<div class="feature-item" style="margin-bottom:8px"><div class="feature-num">✓</div><div><h4>用户注册/认证系统</h4><p>多层身份验证，OAuth2.0集成</p></div></div>
+<div class="feature-item" style="margin-bottom:8px"><div class="feature-num">✓</div><div><h4>AI匹配引擎</h4><p>6维匹配算法，实时推荐</p></div></div>
+<div class="feature-item" style="margin-bottom:8px"><div class="feature-num">✓</div><div><h4>雷达图分析</h4><p>可视化性格/匹配度展示</p></div></div>
+<div class="feature-item" style="margin-bottom:8px"><div class="feature-num">✓</div><div><h4>即时通讯系统</h4><p>WebSocket实时消息</p></div></div>
+<div class="feature-item"><div class="feature-num">✓</div><div><h4>管理后台</h4><p>用户管理、数据分析、内容审核</p></div></div>
+</div>
+<div>
+<h3 style="font-size:1rem;margin-bottom:16px;color:rgba(255,255,255,.7)">🗺️ 产品路线图</h3>
+<div class="timeline" style="flex-direction:column;align-items:flex-start;gap:0">
+<div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:20px">
+<div class="timeline-dot" style="margin-top:4px"></div>
+<div><div class="timeline-year" style="color:#69f0ae">✅ Q1 2026 — 已完成</div><div class="timeline-text">MVP开发 · 核心算法 · 基础架构</div></div>
+</div>
+<div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:20px">
+<div class="timeline-dot" style="margin-top:4px"></div>
+<div><div class="timeline-year" style="color:#e94560">🔄 Q2 2026 — 进行中</div><div class="timeline-text">Beta测试 · 用户增长 · 算法优化</div></div>
+</div>
+<div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:20px">
+<div class="timeline-dot" style="margin-top:4px;background:rgba(255,255,255,.2)"></div>
+<div><div class="timeline-year">Q3 2026</div><div class="timeline-text">正式上线 · 付费功能 · 城市推广</div></div>
+</div>
+<div style="display:flex;align-items:flex-start;gap:16px">
+<div class="timeline-dot" style="margin-top:4px;background:rgba(255,255,255,.2)"></div>
+<div><div class="timeline-year">Q4 2026</div><div class="timeline-text">B2B SaaS · 全国扩张 · A轮融资</div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 9: Competition -->
+<div class="slide" data-slide="9">
+<div class="slide-number">09 / <span>12</span></div>
+<div class="slide-content">
+<div class="slide-title-area">
+<h2>竞争<span class="accent">分析</span></h2>
+<p class="subtitle">差异化定位，AI技术领先</p>
+<div class="section-line"></div>
+</div>
+<table>
+<thead>
+<tr>
+<th>功能维度</th>
+<th style="color:#e94560;font-weight:800">Minder AI</th>
+<th>百合网</th>
+<th>探探</th>
+<th>Soul</th>
+<th>Bumble</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>AI深度匹配</td><td class="highlight-col"><span class="check">✦ 6维算法</span></td><td class="cross">标签匹配</td><td class="cross">位置+颜值</td><td>兴趣标签</td><td class="cross">基础偏好</td></tr>
+<tr><td>性格分析</td><td class="highlight-col"><span class="check">✦ 雷达图</span></td><td>简单测评</td><td class="cross">无</td><td>星球测试</td><td class="cross">无</td></tr>
+<tr><td>AI对话助手</td><td class="highlight-col"><span class="check">✦ 全程辅助</span></td><td class="cross">无</td><td class="cross">无</td><td class="cross">无</td><td class="cross">无</td></tr>
+<tr><td>隐私计算</td><td class="highlight-col"><span class="check">✦ 联邦学习</span></td><td class="cross">基础加密</td><td class="cross">基础加密</td><td class="cross">基础加密</td><td class="cross">基础加密</td></tr>
+<tr><td>反欺诈AI</td><td class="highlight-col"><span class="check">✦ 多模态</span></td><td>人工审核</td><td>基础AI</td><td>社区举报</td><td>基础验证</td></tr>
+<tr><td>B2B SaaS</td><td class="highlight-col"><span class="check">✦ 完整方案</span></td><td class="cross">无</td><td class="cross">无</td><td class="cross">无</td><td class="cross">无</td></tr>
+<tr><td>月费（元）</td><td class="highlight-col"><span class="check">✦ 198</span></td><td>298-599</td><td>148</td><td>98</td><td>168</td></tr>
+</tbody>
+</table>
+<div class="callout" style="margin-top:20px">
+<strong>核心壁垒：</strong>68+AI模型矩阵 + 6维匹配算法 + 隐私计算架构 — 竞品需要18-24个月才能追赶。
+</div>
+</div>
+</div>
+
+<!-- SLIDE 10: Team -->
+<div class="slide" data-slide="10">
+<div class="slide-number">10 / <span>12</span></div>
+<div class="slide-content">
+<div class="slide-title-area">
+<h2>团队<span class="accent">介绍</span></h2>
+<p class="subtitle">跨领域精英团队，技术与商业双轮驱动</p>
+<div class="section-line"></div>
+</div>
+<div class="grid-3" style="margin-bottom:30px">
+<div class="card team-card">
+<div class="team-avatar">👨‍💻</div>
+<h4>核心技术团队</h4>
+<div class="role">AI & Engineering</div>
+<p>68+AI项目经验，深度学习、NLP、推荐系统领域专家</p>
+</div>
+<div class="card team-card">
+<div class="team-avatar">🏥</div>
+<h4>MoKangMedical</h4>
+<div class="role">战略合作方</div>
+<p>医疗健康领域深厚积累，提供心理学与健康数据支持</p>
+</div>
+<div class="card team-card">
+<div class="team-avatar">🌐</div>
+<h4>OPC Alliance</h4>
+<div class="role">产业联盟</div>
+<p>开放产业联盟资源，助力B2B渠道拓展与行业合作</p>
+</div>
+</div>
+<div class="grid-3">
+<div class="card" style="text-align:center">
+<div class="stat-number">68+</div>
+<p style="color:rgba(255,255,255,.5);margin-top:6px;font-size:.85rem">已完成AI项目</p>
+</div>
+<div class="card" style="text-align:center">
+<div class="stat-number">10+</div>
+<p style="color:rgba(255,255,255,.5);margin-top:6px;font-size:.85rem">技术专利/论文</p>
+</div>
+<div class="card" style="text-align:center">
+<div class="stat-number">5年+</div>
+<p style="color:rgba(255,255,255,.5);margin-top:6px;font-size:.85rem">平均行业经验</p>
+</div>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 11: Financials -->
+<div class="slide" data-slide="11">
+<div class="slide-number">11 / <span>12</span></div>
+<div class="slide-content">
+<div class="slide-title-area">
+<h2>财务<span class="accent">预测</span></h2>
+<p class="subtitle">18个月实现盈亏平衡</p>
+<div class="section-line"></div>
+</div>
+<div class="grid-2">
+<div>
+<h3 style="font-size:1rem;margin-bottom:16px;color:rgba(255,255,255,.7)">📈 三年营收预测（万元）</h3>
+<div class="bar-chart">
+<div class="bar-row"><div class="bar-label">Y1</div><div class="bar-track"><div class="bar-fill" style="--w:15%">180万</div></div></div>
+<div class="bar-row"><div class="bar-label">Y2</div><div class="bar-track"><div class="bar-fill blue" style="--w:50%">1,200万</div></div></div>
+<div class="bar-row"><div class="bar-label">Y3</div><div class="bar-track"><div class="bar-fill green" style="--w:100%">5,000万</div></div></div>
+</div>
+<h3 style="font-size:1rem;margin:24px 0 16px;color:rgba(255,255,255,.7)">👥 用户增长目标</h3>
+<div class="bar-chart">
+<div class="bar-row"><div class="bar-label">Y1</div><div class="bar-track"><div class="bar-fill" style="--w:12%">5万</div></div></div>
+<div class="bar-row"><div class="bar-label">Y2</div><div class="bar-track"><div class="bar-fill blue" style="--w:45%">50万</div></div></div>
+<div class="bar-row"><div class="bar-label">Y3</div><div class="bar-track"><div class="bar-fill green" style="--w:100%">300万</div></div></div>
+</div>
+</div>
+<div>
+<div class="card" style="margin-bottom:14px">
+<h3>📊 关键财务指标</h3>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px">
+<div style="text-align:center;padding:12px;background:rgba(255,255,255,.03);border-radius:8px">
+<div style="color:#69f0ae;font-size:1.3rem;font-weight:800">18个月</div>
+<div style="font-size:.75rem;color:rgba(255,255,255,.4)">盈亏平衡</div>
+</div>
+<div style="text-align:center;padding:12px;background:rgba(255,255,255,.03);border-radius:8px">
+<div style="color:#e94560;font-size:1.3rem;font-weight:800">65%</div>
+<div style="font-size:.75rem;color:rgba(255,255,255,.4)">毛利率</div>
+</div>
+<div style="text-align:center;padding:12px;background:rgba(255,255,255,.03);border-radius:8px">
+<div style="color:#0096ff;font-size:1.3rem;font-weight:800">8%</div>
+<div style="font-size:.75rem;color:rgba(255,255,255,.4)">Y3净利率</div>
+</div>
+<div style="text-align:center;padding:12px;background:rgba(255,255,255,.03);border-radius:8px">
+<div style="color:#ffcc02;font-size:1.3rem;font-weight:800">40%</div>
+<div style="font-size:.75rem;color:rgba(255,255,255,.4)">付费转化率</div>
+</div>
+</div>
+</div>
+<div class="card">
+<h3>💰 收入构成（Y3目标）</h3>
+<div style="margin-top:12px">
+<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+<div style="width:12px;height:12px;border-radius:3px;background:#e94560"></div>
+<span style="font-size:.85rem;flex:1">订阅会员</span>
+<span style="font-size:.85rem;color:#e94560;font-weight:600">60%</span>
+</div>
+<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+<div style="width:12px;height:12px;border-radius:3px;background:#0096ff"></div>
+<span style="font-size:.85rem;flex:1">B2B SaaS</span>
+<span style="font-size:.85rem;color:#0096ff;font-weight:600">25%</span>
+</div>
+<div style="display:flex;align-items:center;gap:10px">
+<div style="width:12px;height:12px;border-radius:3px;background:#ffcc02"></div>
+<span style="font-size:.85rem;flex:1">增值服务</span>
+<span style="font-size:.85rem;color:#ffcc02;font-weight:600">15%</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 12: Ask -->
+<div class="slide" data-slide="12">
+<div class="slide-number">12 / <span>12</span></div>
+<div class="slide-content" style="text-align:center">
+<div class="slide-title-area" style="text-align:center">
+<h2>融资<span class="accent">需求</span></h2>
+<p class="subtitle">Pre-A轮融资，加速产品落地与市场拓展</p>
+<div class="section-line" style="margin:20px auto 30px"></div>
+</div>
+<div style="font-size:3.5rem;font-weight:800;background:linear-gradient(135deg,#e94560,#ff6b81);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px">¥ 500万</div>
+<p style="color:rgba(255,255,255,.5);margin-bottom:30px;font-size:1rem">Pre-A轮融资 · 出让10-15%股权</p>
+<div class="grid-3" style="margin-bottom:30px">
+<div class="card" style="text-align:center">
+<div style="font-size:1.8rem;margin-bottom:8px">💻</div>
+<h3 style="color:#e94560;font-size:1.5rem;font-weight:800">40%</h3>
+<p style="font-size:.85rem;color:rgba(255,255,255,.6)">产品研发</p>
+<p style="font-size:.75rem;color:rgba(255,255,255,.35)">200万 — AI模型迭代 · 功能开发</p>
+</div>
+<div class="card" style="text-align:center">
+<div style="font-size:1.8rem;margin-bottom:8px">📢</div>
+<h3 style="color:#0096ff;font-size:1.5rem;font-weight:800">35%</h3>
+<p style="font-size:.85rem;color:rgba(255,255,255,.6)">市场推广</p>
+<p style="font-size:.75rem;color:rgba(255,255,255,.35)">175万 — 用户获取 · 品牌建设</p>
+</div>
+<div class="card" style="text-align:center">
+<div style="font-size:1.8rem;margin-bottom:8px">👥</div>
+<h3 style="color:#69f0ae;font-size:1.5rem;font-weight:800">25%</h3>
+<p style="font-size:.85rem;color:rgba(255,255,255,.6)">团队扩张</p>
+<p style="font-size:.75rem;color:rgba(255,255,255,.35)">125万 — 核心人才 · 运营支持</p>
+</div>
+</div>
+<div class="callout" style="text-align:center;max-width:700px;margin:0 auto 30px">
+<strong>投资亮点：</strong>68+AI技术壁垒 · 200亿蓝海市场 · 已完成MVP · 多元化商业模式 · 18个月回本
+</div>
+<div style="margin-top:20px">
+<button class="cta-btn" onclick="alert('感谢您的关注！请联系我们：contact@minder-ai.com')">📧 联系我们洽谈</button>
+<p style="margin-top:16px;font-size:.85rem;color:rgba(255,255,255,.3)">contact@minder-ai.com &nbsp;|&nbsp; MoKangMedical · OPC Alliance</p>
+</div>
+</div>
+</div>
+
+</div><!-- end slides-container -->
+
+<script>
+(function(){
+const container=document.getElementById('slidesContainer');
+const slides=document.querySelectorAll('.slide');
+const navDots=document.getElementById('navDots');
+const progressBar=document.getElementById('progressBar');
+const currentSlideEl=document.getElementById('currentSlide');
+const total=slides.length;
+let current=0;
+
+// Create nav dots
+slides.forEach((_,i)=>{
+const dot=document.createElement('button');
+dot.className='nav-dot'+(i===0?' active':'');
+dot.addEventListener('click',()=>goTo(i));
+navDots.appendChild(dot);
+});
+
+function goTo(index){
+if(index<0||index>=total)return;
+current=index;
+slides[index].scrollIntoView({behavior:'smooth'});
+update();
+}
+
+function update(){
+const pct=((current+1)/total)*100;
+progressBar.style.width=pct+'%';
+currentSlideEl.textContent=current+1;
+document.querySelectorAll('.nav-dot').forEach((d,i)=>{
+d.classList.toggle('active',i===current);
+});
+slides.forEach((s,i)=>{
+s.classList.toggle('active',i===current);
+});
+}
+
+// Scroll detection
+let scrollTimeout;
+container.addEventListener('scroll',()=>{
+clearTimeout(scrollTimeout);
+scrollTimeout=setTimeout(()=>{
+const scrollTop=container.scrollTop;
+const height=container.clientHeight;
+current=Math.round(scrollTop/height);
+update();
+},50);
+});
+
+// Keyboard navigation
+document.addEventListener('keydown',e=>{
+if(e.key==='ArrowDown'||e.key==='ArrowRight'||e.key===' '){
+e.preventDefault();
+goTo(current+1);
+}else if(e.key==='ArrowUp'||e.key==='ArrowLeft'){
+e.preventDefault();
+goTo(current-1);
+}
+});
+
+// Init
+setTimeout(()=>{slides[0].classList.add('active');},100);
+})();
+</script>
+</body>
+</html>
