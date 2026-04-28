@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minder Admin - 管理后台</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0f1a;--bg2:#16213e;--bg3:#1a1a2e;--accent:#e94560;--text:#e0e0e0;--text2:#8892b0;--glass:rgba(22,33,62,.65)}
+body{background:var(--bg);color:var(--text);font-family:system-ui,sans-serif;display:flex;min-height:100vh}
+.sidebar{width:240px;background:var(--bg2);border-right:1px solid rgba(255,255,255,.06);padding:20px 0;flex-shrink:0}
+.sidebar .logo{font-size:1.3rem;font-weight:800;color:#fff;padding:0 20px 20px;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:12px}
+.sidebar .logo span{color:var(--accent)}
+.sidebar a{display:block;padding:10px 20px;color:var(--text2);text-decoration:none;font-size:.9rem;transition:all .2s}
+.sidebar a:hover,.sidebar a.active{color:#fff;background:rgba(233,69,96,.1);border-left:3px solid var(--accent)}
+.main{flex:1;padding:24px;overflow-y:auto}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+.header h1{font-size:1.5rem;color:#fff}
+.header .date{color:var(--text2);font-size:.9rem}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.stat-card{background:var(--glass);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:20px}
+.stat-card .label{color:var(--text2);font-size:.8rem;margin-bottom:4px}
+.stat-card .value{font-size:2rem;font-weight:800;color:#fff}
+.stat-card .change{font-size:.8rem;margin-top:4px}
+.stat-card .change.up{color:#00b894}
+.stat-card .change.down{color:var(--accent)}
+.grid-2{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:24px}
+.panel{background:var(--glass);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:20px}
+.panel h3{font-size:1rem;color:#fff;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.06)}
+table{width:100%;border-collapse:collapse}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid rgba(255,255,255,.04);font-size:.85rem}
+th{color:var(--text2);font-weight:600;font-size:.75rem;text-transform:uppercase}
+td{color:var(--text)}
+.badge{padding:2px 8px;border-radius:10px;font-size:.7rem;font-weight:600}
+.badge-green{background:rgba(0,184,148,.15);color:#00b894}
+.badge-red{background:rgba(233,69,96,.15);color:var(--accent)}
+.badge-yellow{background:rgba(253,203,110,.15);color:#fdcb6e}
+.bar-chart{display:flex;align-items:flex-end;gap:8px;height:120px;padding-top:10px}
+.bar{flex:1;background:linear-gradient(180deg,var(--accent),var(--accent2));border-radius:4px 4px 0 0;position:relative;transition:height .5s ease;min-width:20px}
+.bar-label{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-size:.65rem;color:var(--text2);white-space:nowrap}
+.bar-value{position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:.7rem;color:#fff;font-weight:600}
+.pie-wrap{display:flex;align-items:center;gap:20px}
+.pie{width:100px;height:100px;border-radius:50%;background:conic-gradient(var(--accent) 0deg 126deg,#6c5ce7 126deg 216deg,#00b894 216deg 288deg,#fdcb6e 288deg 360deg)}
+.pie-legend{display:flex;flex-direction:column;gap:6px}
+.pie-legend span{font-size:.8rem;color:var(--text2);display:flex;align-items:center;gap:6px}
+.pie-legend span::before{content:'';display:inline-block;width:8px;height:8px;border-radius:2px}
+.pie-legend span:nth-child(1)::before{background:var(--accent)}
+.pie-legend span:nth-child(2)::before{background:#6c5ce7}
+.pie-legend span:nth-child(3)::before{background:#00b894}
+.pie-legend span:nth-child(4)::before{background:#fdcb6e}
+@media(max-width:900px){.sidebar{display:none}.stats-row{grid-template-columns:1fr 1fr}.grid-2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="sidebar">
+  <div class="logo">Min<span>der</span></div>
+  <a href="#" class="active">Dashboard</a>
+  <a href="#">用户管理</a>
+  <a href="#">匹配分析</a>
+  <a href="#">消息监控</a>
+  <a href="#">举报处理</a>
+  <a href="#">订阅收入</a>
+  <a href="#">AI引擎</a>
+  <a href="#">系统设置</a>
+  <a href="/" style="margin-top:20px;color:var(--accent)">返回首页</a>
+</div>
+<div class="main">
+  <div class="header">
+    <h1>管理后台</h1>
+    <div class="date">2026年4月28日</div>
+  </div>
+  <div class="stats-row">
+    <div class="stat-card"><div class="label">总用户数</div><div class="value">12,847</div><div class="change up">+234 本周</div></div>
+    <div class="stat-card"><div class="label">活跃匹配</div><div class="value">3,421</div><div class="change up">+12.3%</div></div>
+    <div class="stat-card"><div class="label">今日消息</div><div class="value">28,493</div><div class="change up">+8.7%</div></div>
+    <div class="stat-card"><div class="label">月收入</div><div class="value">¥847K</div><div class="change up">+23.1%</div></div>
+  </div>
+  <div class="grid-2">
+    <div class="panel">
+      <h3>最近注册用户</h3>
+      <table>
+        <tr><th>用户</th><th>城市</th><th>VIP</th><th>状态</th><th>注册时间</th></tr>
+        <tr><td>林小雅</td><td>杭州</td><td><span class="badge badge-green">VIP</span></td><td><span class="badge badge-green">活跃</span></td><td>今天 14:23</td></tr>
+        <tr><td>陈志远</td><td>北京</td><td><span class="badge badge-yellow">免费</span></td><td><span class="badge badge-green">活跃</span></td><td>今天 12:05</td></tr>
+        <tr><td>王浩然</td><td>上海</td><td><span class="badge badge-green">SVIP</span></td><td><span class="badge badge-green">活跃</span></td><td>昨天</td></tr>
+        <tr><td>张婉清</td><td>深圳</td><td><span class="badge badge-yellow">免费</span></td><td><span class="badge badge-red">待验证</span></td><td>昨天</td></tr>
+        <tr><td>刘思涵</td><td>成都</td><td><span class="badge badge-green">VIP</span></td><td><span class="badge badge-green">活跃</span></td><td>2天前</td></tr>
+      </table>
+    </div>
+    <div class="panel">
+      <h3>用户分布</h3>
+      <div class="pie-wrap">
+        <div class="pie"></div>
+        <div class="pie-legend">
+          <span>VIP会员 35%</span>
+          <span>SVIP会员 25%</span>
+          <span>免费用户 20%</span>
+          <span>试用期 20%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel">
+    <h3>7天匹配趋势</h3>
+    <div class="bar-chart">
+      <div class="bar" style="height:60%"><div class="bar-value">342</div><div class="bar-label">周一</div></div>
+      <div class="bar" style="height:75%"><div class="bar-value">428</div><div class="bar-label">周二</div></div>
+      <div class="bar" style="height:55%"><div class="bar-value">312</div><div class="bar-label">周三</div></div>
+      <div class="bar" style="height:85%"><div class="bar-value">487</div><div class="bar-label">周四</div></div>
+      <div class="bar" style="height:90%"><div class="bar-value">513</div><div class="bar-label">周五</div></div>
+      <div class="bar" style="height:100%"><div class="bar-value">571</div><div class="bar-label">周六</div></div>
+      <div class="bar" style="height:95%"><div class="bar-value">542</div><div class="bar-label">周日</div></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
